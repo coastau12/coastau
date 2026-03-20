@@ -46,15 +46,19 @@
         .player-tag { font-size: 28px; font-weight: 700; text-transform: uppercase; letter-spacing: -0.01em; margin-bottom: 4px; transition: color 0.3s; }
         .player-row:hover .player-tag { color: var(--accent); }
         
-        /* New Layout for Country + Duo Badge */
         .player-details { display: flex; gap: 12px; align-items: center; }
         .player-meta { font-size: 14px; color: var(--text-muted); }
         .duo-badge { font-size: 10px; color: var(--accent); background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.2); padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
         
-        /* Links Container */
+        /* Links Container & Social Links CSS */
         .player-links { display: flex; gap: 20px; align-items: center; }
-        .social-link { font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; text-decoration: none; transition: color 0.3s; font-weight: 500; }
+        .social-link { display: flex; align-items: center; font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; text-decoration: none; transition: all 0.3s; font-weight: 500; }
         .social-link:hover { color: var(--text); }
+
+        /* The specific style for the X/Twitter Link */
+        .twitter-link-btn { height: 16px; width: 16px; margin-right: 6px; }
+        .twitter-link-btn svg { fill: var(--text-muted); height: 100%; transition: all 0.3s; }
+        .social-link:hover .twitter-link-btn svg { fill: var(--text); }
         
         .tracker-link { font-size: 13px; color: var(--text); text-transform: uppercase; letter-spacing: 0.1em; text-decoration: none; font-weight: 700; transition: color 0.3s; }
         .tracker-link:hover { color: var(--accent); }
@@ -83,7 +87,8 @@
             .hamburger { display: flex; } 
             .player-tag { font-size: 22px; } 
             .content-wrapper { padding-top: 100px; } 
-            .player-links { flex-direction: column; gap: 6px; align-items: flex-end; }
+            .player-details { flex-direction: column; align-items: flex-start; gap: 4px; }
+            .player-links { flex-direction: column; gap: 10px; align-items: flex-end; }
         }
     </style>
 </head>
@@ -196,13 +201,15 @@
                 }
                 
                 container.innerHTML = players.map((p, index) => {
-                    // Layout Details
                     const metaHtml = p.country ? `<span class="player-meta">${p.country}</span>` : '';
                     const duoHtml = p.duo ? `<span class="duo-badge">Duo w/ ${p.duo}</span>` : '';
                     
-                    // Generate link HTML
                     const twitchHtml = p.twitch ? `<a href="${p.twitch}" target="_blank" class="social-link">Twitch</a>` : '';
-                    const twitterHtml = p.twitter ? `<a href="${p.twitter}" target="_blank" class="social-link">X</a>` : '';
+                    
+                    // Updated Twitter/X link with bigger logo SVG
+                    const xLogoSvg = '<div class="twitter-link-btn"><svg viewBox="0 0 24 24"><g><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></g></svg></div>';
+                    const twitterHtml = p.twitter ? `<a href="${p.twitter}" target="_blank" class="social-link">${xLogoSvg}</a>` : '';
+                    
                     const trackerHtml = p.tracker ? `<a href="${p.tracker}" target="_blank" class="tracker-link">Tracker →</a>` : '';
 
                     return `
