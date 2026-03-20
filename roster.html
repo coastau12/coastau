@@ -36,22 +36,28 @@
         .page-title span { color: var(--accent); }
 
         .roster-list { padding-top: 10px; }
-        .player-row { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; border-bottom: 1px solid rgba(255,255,255,0.05); text-decoration: none; color: var(--text); transition: all 0.3s; position: relative; animation: fadeInUp 0.6s ease-out both; }
-        .player-row:nth-child(1) { animation-delay: 0.1s; }
-        .player-row:nth-child(2) { animation-delay: 0.2s; }
-        .player-row:nth-child(3) { animation-delay: 0.3s; }
-        .player-row:nth-child(4) { animation-delay: 0.4s; }
-        .player-row::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 0; height: 1px; background: var(--accent); transition: width 0.3s; }
+        
+        .player-row { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--text); transition: all 0.3s; position: relative; animation: fadeInUp 0.6s ease-out both; }
+        .player-row::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 0; background: var(--accent); transition: width 0.3s ease; }
         .player-row:hover { padding-left: 20px; background: rgba(0, 212, 255, 0.03); }
-        .player-row:hover::before { width: 12px; }
+        .player-row:hover::before { width: 3px; }
         
         .player-info { display: flex; flex-direction: column; }
         .player-tag { font-size: 28px; font-weight: 700; text-transform: uppercase; letter-spacing: -0.01em; margin-bottom: 4px; transition: color 0.3s; }
         .player-row:hover .player-tag { color: var(--accent); }
-        .player-meta { font-size: 14px; color: var(--text-muted); }
         
-        .player-action { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; opacity: 0; transition: all 0.3s; transform: translateX(-10px); }
-        .player-row:hover .player-action { opacity: 1; color: var(--accent); transform: translateX(0); }
+        /* New Layout for Country + Duo Badge */
+        .player-details { display: flex; gap: 12px; align-items: center; }
+        .player-meta { font-size: 14px; color: var(--text-muted); }
+        .duo-badge { font-size: 10px; color: var(--accent); background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.2); padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
+        
+        /* Links Container */
+        .player-links { display: flex; gap: 20px; align-items: center; }
+        .social-link { font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; text-decoration: none; transition: color 0.3s; font-weight: 500; }
+        .social-link:hover { color: var(--text); }
+        
+        .tracker-link { font-size: 13px; color: var(--text); text-transform: uppercase; letter-spacing: 0.1em; text-decoration: none; font-weight: 700; transition: color 0.3s; }
+        .tracker-link:hover { color: var(--accent); }
 
         .empty-state { padding: 40px 0; text-align: left; color: var(--text-muted); font-style: italic; animation: fadeIn 0.6s; }
 
@@ -72,7 +78,13 @@
         .login-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(255, 51, 102, 0.2); }
         .login-error { color: var(--danger); font-size: 12px; margin-top: 12px; text-align: center; display: none; }
         
-        @media(max-width:640px){ .nav-links { display: none; } .hamburger { display: flex; } .player-tag { font-size: 22px; } .content-wrapper { padding-top: 100px; } }
+        @media(max-width:640px){ 
+            .nav-links { display: none; } 
+            .hamburger { display: flex; } 
+            .player-tag { font-size: 22px; } 
+            .content-wrapper { padding-top: 100px; } 
+            .player-links { flex-direction: column; gap: 6px; align-items: flex-end; }
+        }
     </style>
 </head>
 <body>
@@ -184,17 +196,30 @@
                 }
                 
                 container.innerHTML = players.map((p, index) => {
-                    const trackerHtml = p.tracker ? `<span class="player-action">View Profile →</span>` : '';
-                    const metaHtml = p.country ? `<div class="player-meta">${p.country}</div>` : '';
+                    // Layout Details
+                    const metaHtml = p.country ? `<span class="player-meta">${p.country}</span>` : '';
+                    const duoHtml = p.duo ? `<span class="duo-badge">Duo w/ ${p.duo}</span>` : '';
+                    
+                    // Generate link HTML
+                    const twitchHtml = p.twitch ? `<a href="${p.twitch}" target="_blank" class="social-link">Twitch</a>` : '';
+                    const twitterHtml = p.twitter ? `<a href="${p.twitter}" target="_blank" class="social-link">X</a>` : '';
+                    const trackerHtml = p.tracker ? `<a href="${p.tracker}" target="_blank" class="tracker-link">Tracker →</a>` : '';
 
                     return `
-                        <a href="${p.tracker || '#'}" target="_blank" class="player-row" style="animation-delay: ${index * 0.1}s" ${!p.tracker ? 'style="pointer-events:none;"' : ''}>
+                        <div class="player-row" style="animation-delay: ${index * 0.1}s">
                             <div class="player-info">
                                 <div class="player-tag">${p.tag}</div>
-                                ${metaHtml}
+                                <div class="player-details">
+                                    ${metaHtml}
+                                    ${duoHtml}
+                                </div>
                             </div>
-                            ${trackerHtml}
-                        </a>
+                            <div class="player-links">
+                                ${twitchHtml}
+                                ${twitterHtml}
+                                ${trackerHtml}
+                            </div>
+                        </div>
                     `;
                 }).join('');
             } catch (err) {

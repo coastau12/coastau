@@ -42,9 +42,6 @@
         .roster-table th { text-align: left; padding: 16px 0; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); font-weight: 600; border-bottom: 1px solid var(--border); }
         .roster-table td { padding: 16px 0; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); transition: all 0.3s; }
         .roster-table tr { animation: slideIn 0.4s ease-out both; }
-        .roster-table tr:nth-child(1) { animation-delay: 0.1s; }
-        .roster-table tr:nth-child(2) { animation-delay: 0.2s; }
-        .roster-table tr:nth-child(3) { animation-delay: 0.3s; }
         .roster-table tr:hover td { color: var(--accent); background: rgba(0, 212, 255, 0.03); }
         .player-tag { font-weight: 700; text-transform: uppercase; }
         .delete-btn { background: rgba(255,51,102,0.1); border: 1px solid rgba(255,51,102,0.3); color: var(--danger); padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
@@ -96,8 +93,8 @@
                 <div class="stat-label">With Tracker</div>
             </div>
             <div class="stat">
-                <div class="stat-value" id="statImages">0</div>
-                <div class="stat-label">With Images</div>
+                <div class="stat-value" id="statSocials">0</div>
+                <div class="stat-label">With Socials</div>
             </div>
         </div>
 
@@ -124,13 +121,21 @@
                     <label>Country</label>
                     <input type="text" id="pCountry" placeholder="e.g. Australia"/>
                 </div>
-                <div class="form-group full">
+                <div class="form-group">
+                    <label>Twitch URL</label>
+                    <input type="url" id="pTwitch" placeholder="https://twitch.tv/..."/>
+                </div>
+                <div class="form-group">
+                    <label>X (Twitter) URL</label>
+                    <input type="url" id="pTwitter" placeholder="https://x.com/..."/>
+                </div>
+                <div class="form-group">
                     <label>Tracker URL</label>
                     <input type="url" id="pTracker" placeholder="https://fortnitetracker.com/..."/>
                 </div>
-                <div class="form-group full">
-                    <label>Image URL</label>
-                    <input type="url" id="pImage" placeholder="Player image (optional)"/>
+                <div class="form-group">
+                    <label>Duo Partner (Optional)</label>
+                    <input type="text" id="pDuo" placeholder="e.g. Kadenn"/>
                 </div>
                 <button class="submit-btn" onclick="addPlayer()">Add Player</button>
             </form>
@@ -166,7 +171,7 @@
         function updateStats() {
             document.getElementById('statTotal').textContent = players.length;
             document.getElementById('statTracker').textContent = players.filter(p => p.tracker).length;
-            document.getElementById('statImages').textContent = players.filter(p => p.image).length;
+            document.getElementById('statSocials').textContent = players.filter(p => p.twitch || p.twitter).length;
         }
         
         function renderTable() {
@@ -192,14 +197,18 @@
                 tag: tag,
                 country: document.getElementById('pCountry').value.trim(),
                 tracker: document.getElementById('pTracker').value.trim(),
-                image: document.getElementById('pImage').value.trim()
+                twitch: document.getElementById('pTwitch').value.trim(),
+                twitter: document.getElementById('pTwitter').value.trim(),
+                duo: document.getElementById('pDuo').value.trim()
             });
             
             await saveData();
             document.getElementById('pTag').value = '';
             document.getElementById('pCountry').value = '';
             document.getElementById('pTracker').value = '';
-            document.getElementById('pImage').value = '';
+            document.getElementById('pTwitch').value = '';
+            document.getElementById('pTwitter').value = '';
+            document.getElementById('pDuo').value = '';
             showToast('Player added successfully');
         }
         
