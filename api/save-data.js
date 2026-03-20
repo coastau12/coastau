@@ -1,6 +1,5 @@
 import { MongoClient } from 'mongodb';
 
-// Get the MongoDB URI from Vercel's environment variables
 const uri = process.env.MONGODB_URI;
 const options = {};
 
@@ -11,7 +10,6 @@ if (!process.env.MONGODB_URI) {
     throw new Error('Please add your Mongo URI to Vercel Environment Variables');
 }
 
-// Caching the database connection so it doesn't crash your server
 if (process.env.NODE_ENV === 'development') {
     if (!global._mongoClientPromise) {
         client = new MongoClient(uri, options);
@@ -29,13 +27,11 @@ export default async function handler(req, res) {
         const db = connectedClient.db('coast_esports');
         const collection = db.collection('roster');
 
-        // GET: Fetch players to display on the website
         if (req.method === 'GET') {
             const data = await collection.findOne({ _id: 'players_list' });
             return res.status(200).json({ players: data ? data.players : [] });
         }
 
-        // POST: Save new players from the Admin panel
         if (req.method === 'POST') {
             const { players } = req.body;
             await collection.updateOne(

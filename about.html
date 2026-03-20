@@ -9,7 +9,7 @@
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         :root { --bg: #020614; --bg-card: #0a1536; --accent: #00d4ff; --text: #e2e8f0; --text-muted: #829ab1; --border: rgba(0, 212, 255, 0.15); --danger: #ff3366; }
-        body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; }
+        body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
         
         nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 72px; background: rgba(2, 6, 20, 0.9); backdrop-filter: blur(18px); border-bottom: 1px solid var(--border); }
         .nav-logo img { height: 42px; border-radius: 8px; }
@@ -25,8 +25,7 @@
         .mobile-menu a { font-size: 28px; font-weight: 700; color: var(--text); text-decoration: none; text-transform: uppercase; }
         .mobile-close { position: absolute; top: 24px; right: 5%; font-size: 28px; background: none; border: none; color: var(--text-muted); cursor: pointer; }
 
-        .container { max-width: 1000px; margin: 0 auto; padding: 140px 5% 80px; }
-        
+        .container { flex: 1; max-width: 1000px; width: 100%; margin: 0 auto; padding: 140px 5% 80px; }
         .page-header { margin-bottom: 60px; }
         .page-label { font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; font-weight: 600; }
         .page-title { font-size: clamp(48px, 10vw, 100px); font-weight: 700; line-height: 0.9; letter-spacing: -0.03em; text-transform: uppercase; }
@@ -39,15 +38,8 @@
         .content-block strong { color: var(--accent); font-weight: 600; }
 
         .values-list { display: flex; flex-direction: column; }
-        .value-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 24px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
-            text-decoration: none; color: var(--text); transition: all 0.3s; position: relative;
-        }
-        .value-item::before {
-            content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
-            width: 0; height: 1px; background: var(--accent); transition: width 0.3s;
-        }
+        .value-item { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; border-bottom: 1px solid rgba(255,255,255,0.05); text-decoration: none; color: var(--text); transition: all 0.3s; position: relative; }
+        .value-item::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 0; height: 1px; background: var(--accent); transition: width 0.3s; }
         .value-item:hover { padding-left: 20px; color: var(--accent); }
         .value-item:hover::before { width: 12px; }
         .value-name { font-size: 20px; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; }
@@ -92,7 +84,7 @@
         <div class="hamburger" onclick="openMobile()"><span></span><span></span><span></span></div>
     </nav>
 
-    <div class="container">
+    <main class="container">
         <div class="page-header">
             <div class="page-label">Our Philosophy</div>
             <h1 class="page-title">Built<br>To <span>Win</span></h1>
@@ -107,25 +99,13 @@
         <div class="content-block">
             <h2>Core Values</h2>
             <div class="values-list">
-                <div class="value-item">
-                    <span class="value-name">Discipline</span>
-                    <span class="value-desc">Consistency over intensity</span>
-                </div>
-                <div class="value-item">
-                    <span class="value-name">Adaptation</span>
-                    <span class="value-desc">Meta changes, we evolve</span>
-                </div>
-                <div class="value-item">
-                    <span class="value-name">Synergy</span>
-                    <span class="value-desc">Individual skill, team execution</span>
-                </div>
-                <div class="value-item">
-                    <span class="value-name">Relentless</span>
-                    <span class="value-desc">Never satisfied, always improving</span>
-                </div>
+                <div class="value-item"><span class="value-name">Discipline</span><span class="value-desc">Consistency over intensity</span></div>
+                <div class="value-item"><span class="value-name">Adaptation</span><span class="value-desc">Meta changes, we evolve</span></div>
+                <div class="value-item"><span class="value-name">Synergy</span><span class="value-desc">Individual skill, team execution</span></div>
+                <div class="value-item"><span class="value-name">Relentless</span><span class="value-desc">Never satisfied, always improving</span></div>
             </div>
         </div>
-    </div>
+    </main>
 
     <footer>
         <img src="https://i.postimg.cc/mkyVn8Mr/Coast.webp" alt="Coast"/>
@@ -156,13 +136,34 @@
         function openAdminDrawer() { drawer.classList.add('open'); passInput.focus(); }
         function closeAdminDrawer() { drawer.classList.remove('open'); error.style.display = 'none'; passInput.value = ''; }
         
-        function loginAdmin() {
-            if (passInput.value === 'coastup2026') {
-                localStorage.setItem('coast_admin_auth', 'true');
-                window.location.href = 'admin.html';
-            } else {
+        async function loginAdmin() {
+            const btn = document.querySelector('.login-btn');
+            const originalText = btn.textContent;
+            btn.textContent = 'VERIFYING...';
+            error.style.display = 'none';
+
+            try {
+                const res = await fetch('/api/auth', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: passInput.value })
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    localStorage.setItem('coast_admin_auth', 'true');
+                    window.location.href = 'admin.html';
+                } else {
+                    error.textContent = 'Invalid password.';
+                    error.style.display = 'block';
+                    passInput.value = '';
+                }
+            } catch (err) {
+                error.textContent = 'Server error. Try again.';
                 error.style.display = 'block';
-                passInput.value = '';
+            } finally {
+                btn.textContent = originalText;
             }
         }
         

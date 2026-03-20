@@ -24,7 +24,6 @@
         .logout:hover { border-color: var(--danger); color: var(--danger); transform: translateY(-2px); }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 100px 5% 60px; }
-        
         .page-header { margin-bottom: 40px; border-bottom: 1px solid var(--border); padding-bottom: 40px; animation: fadeInUp 0.6s; }
         .page-label { font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; font-weight: 600; }
         .page-title { font-size: clamp(36px, 6vw, 64px); font-weight: 700; letter-spacing: -0.02em; text-transform: uppercase; }
@@ -47,10 +46,7 @@
         .roster-table tr:nth-child(2) { animation-delay: 0.2s; }
         .roster-table tr:nth-child(3) { animation-delay: 0.3s; }
         .roster-table tr:hover td { color: var(--accent); background: rgba(0, 212, 255, 0.03); }
-        .player-cell { display: flex; flex-direction: column; }
         .player-tag { font-weight: 700; text-transform: uppercase; }
-        .player-real { font-size: 13px; color: var(--text-muted); }
-        .role-badge { font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; }
         .delete-btn { background: rgba(255,51,102,0.1); border: 1px solid rgba(255,51,102,0.3); color: var(--danger); padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
         .delete-btn:hover { background: rgba(255,51,102,0.2); transform: scale(1.05); }
 
@@ -60,11 +56,11 @@
         .form-group label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; font-weight: 600; }
         .form-group input { background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--text); padding: 14px; border-radius: 4px; font-family: inherit; font-size: 14px; outline: none; transition: all 0.3s; }
         .form-group input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1); transform: translateY(-2px); }
-        .submit-btn { grid-column: 1 / -1; background: var(--accent); color: #000; border: none; padding: 16px; border-radius: 4px; font-family: inherit; font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.3s; }
+        
+        .submit-btn { grid-column: 1 / -1; background: var(--accent); color: #000; border: none; padding: 16px; border-radius: 4px; font-family: inherit; font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.3s; margin-top: 10px; }
         .submit-btn:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0, 212, 255, 0.2); }
 
         .empty { color: var(--text-muted); padding: 40px 0; font-style: italic; }
-        
         .toast { position: fixed; bottom: 24px; right: 24px; background: var(--success); color: #000; padding: 16px 24px; border-radius: 4px; font-weight: 600; transform: translateY(100px); opacity: 0; transition: all 0.3s; z-index: 1000; }
         .toast.show { transform: translateY(0); opacity: 1; }
         
@@ -109,10 +105,10 @@
             <div class="section-title">Current Roster</div>
             <table class="roster-table">
                 <thead>
-                    <tr><th>Tag</th><th>Country</th><th>Tracker</th><th style="text-align:right;">Action</th></tr>
+                    <tr><th>Tag</th><th>Country</th><th style="text-align:right;">Action</th></tr>
                 </thead>
                 <tbody id="rosterBody">
-                    <tr><td colspan="4" class="empty">No players found.</td></tr>
+                    <tr><td colspan="3" class="empty">No players found.</td></tr>
                 </tbody>
             </table>
         </div>
@@ -122,7 +118,7 @@
             <form class="add-form" onsubmit="return false;">
                 <div class="form-group">
                     <label>In-Game Tag *</label>
-                    <input type="text" id="pTag" placeholder="e.g. Phantom"/>
+                    <input type="text" id="pTag" placeholder="e.g. Phantom" required/>
                 </div>
                 <div class="form-group">
                     <label>Country</label>
@@ -176,14 +172,13 @@
         function renderTable() {
             const tbody = document.getElementById('rosterBody');
             if (!players.length) {
-                tbody.innerHTML = '<tr><td colspan="4" class="empty">No players found.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="3" class="empty">No players found.</td></tr>';
                 return;
             }
             tbody.innerHTML = players.map((p, i) => `
                 <tr>
                     <td><span class="player-tag">${p.tag}</span></td>
                     <td>${p.country || '—'}</td>
-                    <td>${p.tracker ? '<span style="color:var(--accent)">Linked</span>' : '—'}</td>
                     <td style="text-align:right;"><button class="delete-btn" onclick="deletePlayer(${i})">Remove</button></td>
                 </tr>
             `).join('');
@@ -197,9 +192,7 @@
                 tag: tag,
                 country: document.getElementById('pCountry').value.trim(),
                 tracker: document.getElementById('pTracker').value.trim(),
-                image: document.getElementById('pImage').value.trim(),
-                name: '',
-                role: 'Player'
+                image: document.getElementById('pImage').value.trim()
             });
             
             await saveData();
@@ -227,8 +220,7 @@
                 renderTable();
                 updateStats();
             } catch (err) {
-                alert('Failed to save');
-                loadData();
+                alert('Failed to save data. Please check your backend connection.');
             }
         }
         
