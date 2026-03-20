@@ -1,0 +1,16 @@
+{
+  "name": "coast-esports",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Coast Esports — Official Website",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "@vercel/kv": "^1.0.0"
+  },
+  "engines": {
+    "node": "20.x"
+  }
+}
