@@ -4,13 +4,33 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Merch — Coast</title>
+
+    <meta name="title" content="Coast Esports">
+    <meta name="description" content="Professional esports organization competing at the highest level. The tide is rising.">
+    <meta name="theme-color" content="#00d4ff">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Coast Esports">
+    <meta property="og:description" content="Professional esports organization competing at the highest level. The tide is rising.">
+    <meta property="og:image" content="https://i.postimg.cc/52hvw8Qd/Coast-Banner.png">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Coast Esports">
+    <meta property="twitter:description" content="Professional esports organization competing at the highest level. The tide is rising.">
+    <meta property="twitter:image" content="https://i.postimg.cc/52hvw8Qd/Coast-Banner.png">
+
     <link rel="icon" href="https://i.postimg.cc/mkyVn8Mr/Coast.webp"/>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        :root { --bg: #020614; --accent: #00d4ff; --text: #e2e8f0; --text-muted: #829ab1; --border: rgba(0, 212, 255, 0.15); --danger: #ff3366; }
         
-        body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; animation: pageFadeIn 0.5s ease-out forwards; opacity: 0; }
+        :root { --bg: #020614; --accent: #00d4ff; --text: #e2e8f0; --text-muted: #829ab1; --border: rgba(0, 212, 255, 0.15); --danger: #ff3366; }
+
+        /* Custom Coast Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: rgba(0, 212, 255, 0.2); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+        
+        body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; animation: pageFadeIn 0.5s ease-out forwards; opacity: 0; }
         @keyframes pageFadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         body.fade-out { animation: pageFadeOut 0.4s ease-in forwards; }
         @keyframes pageFadeOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-15px); } }
@@ -108,7 +128,7 @@
 
     <script>
         function openMobile() { document.getElementById('mobileMenu').classList.add('open'); document.body.style.overflow = 'hidden'; }
-        function closeMobile() { document.getElementById('mobileMenu').classList.remove('open'); document.body.style.overflow = 'hidden'; }
+        function closeMobile() { document.getElementById('mobileMenu').classList.remove('open'); document.body.style.overflow = 'auto'; }
         
         const drawer = document.getElementById('adminDrawer');
         const passInput = document.getElementById('adminPass');
@@ -156,6 +176,7 @@
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', e => { if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) e.preventDefault(); });
 
+        // Page Transitions
         document.querySelectorAll('a').forEach(link => {
             if (link.hostname === window.location.hostname && !link.target && !link.hasAttribute('download') && link.getAttribute('href') !== '#' && !link.href.startsWith('mailto:')) {
                 link.addEventListener('click', e => {

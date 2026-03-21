@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Partners — Coast</title>
-
+    <title>Page Not Found — Coast</title>
+    
     <meta name="title" content="Coast Esports">
     <meta name="description" content="Professional esports organization competing at the highest level. The tide is rising.">
     <meta name="theme-color" content="#00d4ff">
@@ -21,23 +21,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        
         :root { --bg: #020614; --accent: #00d4ff; --text: #e2e8f0; --text-muted: #829ab1; --border: rgba(0, 212, 255, 0.15); --danger: #ff3366; }
-
+        
         /* Custom Coast Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: rgba(0, 212, 255, 0.2); border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-        
+
         body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; animation: pageFadeIn 0.5s ease-out forwards; opacity: 0; }
         @keyframes pageFadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         body.fade-out { animation: pageFadeOut 0.4s ease-in forwards; }
         @keyframes pageFadeOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-15px); } }
-        
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         
         nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 72px; background: rgba(2, 6, 20, 0.9); backdrop-filter: blur(18px); border-bottom: 1px solid var(--border); animation: fadeIn 0.8s; }
         .nav-logo img { height: 42px; border-radius: 8px; transition: transform 0.3s; }
@@ -54,32 +51,20 @@
         .mobile-menu a { font-size: 28px; font-weight: 700; color: var(--text); text-decoration: none; text-transform: uppercase; }
         .mobile-close { position: absolute; top: 24px; right: 5%; font-size: 28px; background: none; border: none; color: var(--text-muted); cursor: pointer; }
 
-        .content { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 120px 5%; max-width: 1000px; margin: 0 auto; width: 100%; }
-        .page-label { font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 24px; font-weight: 600; animation: fadeInUp 0.6s; }
-        .page-title { font-size: clamp(64px, 15vw, 180px); font-weight: 700; line-height: 0.85; letter-spacing: -0.04em; text-transform: uppercase; margin-bottom: 40px; animation: fadeInUp 0.6s 0.1s both; }
-        .page-title span { color: var(--accent); animation: pulse 2s infinite; }
-        .page-text { font-size: 18px; color: var(--text-muted); max-width: 500px; line-height: 1.6; border-left: 2px solid var(--border); padding-left: 24px; animation: fadeInUp 0.6s 0.2s both; }
+        .content { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 120px 5%; width: 100%; }
+        .error-code { font-size: clamp(100px, 20vw, 250px); font-weight: 700; line-height: 0.8; color: transparent; -webkit-text-stroke: 2px var(--border); margin-bottom: 24px; position: relative; animation: fadeInUp 0.6s both; }
+        .error-code::after { content: '404'; position: absolute; left: 0; top: 0; width: 100%; height: 100%; color: var(--accent); clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%); }
+        .page-title { font-size: clamp(32px, 8vw, 64px); font-weight: 700; letter-spacing: -0.02em; text-transform: uppercase; margin-bottom: 16px; animation: fadeInUp 0.6s 0.1s both; }
+        .page-text { font-size: 18px; color: var(--text-muted); max-width: 500px; line-height: 1.6; margin-bottom: 40px; animation: fadeInUp 0.6s 0.2s both; }
+        
+        .btn { display: inline-block; padding: 16px 32px; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; color: #000; background: var(--accent); border: 1px solid var(--accent); border-radius: 4px; transition: all 0.3s; animation: fadeInUp 0.6s 0.3s both; }
+        .btn:hover { background: transparent; color: var(--accent); transform: translateY(-2px); }
 
         footer { border-top: 1px solid var(--border); padding: 24px 5%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; font-size: 12px; color: var(--text-muted); animation: fadeIn 1s 0.4s both; }
         footer img { height: 28px; border-radius: 6px; }
         .footer-hash { display: flex; gap: 16px; color: var(--accent); font-weight: 600; }
-
-        .admin-drawer { position: fixed; top: 0; right: 0; bottom: 0; width: 100%; max-width: 400px; background: rgba(2, 6, 20, 0.95); backdrop-filter: blur(25px); border-left: 1px solid rgba(0, 212, 255, 0.2); box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5); z-index: 10000; transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; }
-        .admin-drawer.open { transform: translateX(0); }
-        .drawer-header { padding: 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .drawer-title { font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
-        .drawer-close { background: none; border: none; color: var(--text-muted); font-size: 24px; cursor: pointer; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; transition: color 0.3s; }
-        .drawer-close:hover { color: var(--accent); }
-        .drawer-body { padding: 40px 24px; flex: 1; }
-        .login-field { width: 100%; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border); color: var(--text); padding: 16px; border-radius: 6px; font-family: inherit; font-size: 16px; letter-spacing: 2px; margin-bottom: 16px; outline: none; transition: all 0.3s; }
-        .login-field:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1); }
-        .login-btn { width: 100%; background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 16px; border-radius: 6px; font-family: inherit; font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; }
-        .login-btn::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--accent); transition: width 0.3s; z-index: -1; }
-        .login-btn:hover::before { width: 100%; }
-        .login-btn:hover { color: #000; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0, 212, 255, 0.2); }
-        .login-error { color: var(--danger); font-size: 12px; margin-top: 12px; text-align: center; display: none; }
         
-        @media(max-width:640px){ .nav-links { display: none; } .hamburger { display: flex; } .content { padding-top: 100px; } }
+        @media(max-width:640px){ .nav-links { display: none; } .hamburger { display: flex; } }
     </style>
 </head>
 <body>
@@ -95,7 +80,7 @@
             <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="roster.html">Roster</a></li>
-            <li><a href="partners.html" class="active">Partners</a></li>
+            <li><a href="partners.html">Partners</a></li>
             <li><a href="merch.html">Merch</a></li>
             <li><a href="contact.html">Contact</a></li>
         </ul>
@@ -103,9 +88,10 @@
     </nav>
 
     <main class="content">
-        <div class="page-label">Collaborations</div>
-        <h1 class="page-title">Coming<br><span>Soon</span></h1>
-        <p class="page-text">We are actively securing partnerships to elevate the Coast ecosystem. Exciting collaborations are on the horizon.</p>
+        <div class="error-code">404</div>
+        <h1 class="page-title">Lost at Sea</h1>
+        <p class="page-text">The page you are looking for has been caught in the tide. It might have been removed, renamed, or temporarily pulled under.</p>
+        <a href="index.html" class="btn">Return to Surface</a>
     </main>
 
     <footer>
@@ -114,67 +100,9 @@
         <div class="footer-hash"><span>#CoastUp</span><span>#TheTideIsRising</span></div>
     </footer>
 
-    <div class="admin-drawer" id="adminDrawer">
-        <div class="drawer-header">
-            <span class="drawer-title">Command Center</span>
-            <button class="drawer-close" onclick="closeAdminDrawer()">✕</button>
-        </div>
-        <div class="drawer-body">
-            <input type="password" id="adminPass" class="login-field" placeholder="Access Code..." onkeydown="if(event.key==='Enter') loginAdmin()"/>
-            <button class="login-btn" onclick="loginAdmin()">Authenticate</button>
-            <div class="login-error" id="loginError">Access Denied.</div>
-        </div>
-    </div>
-
     <script>
         function openMobile() { document.getElementById('mobileMenu').classList.add('open'); document.body.style.overflow = 'hidden'; }
-        function closeMobile() { document.getElementById('mobileMenu').classList.remove('open'); document.body.style.overflow = 'auto'; }
-        
-        const drawer = document.getElementById('adminDrawer');
-        const passInput = document.getElementById('adminPass');
-        const error = document.getElementById('loginError');
-        
-        function openAdminDrawer() { drawer.classList.add('open'); passInput.focus(); }
-        function closeAdminDrawer() { drawer.classList.remove('open'); error.style.display = 'none'; passInput.value = ''; }
-        
-        async function loginAdmin() {
-            const btn = document.querySelector('.login-btn');
-            const originalText = btn.textContent;
-            btn.textContent = 'VERIFYING...';
-            error.style.display = 'none';
-
-            try {
-                const res = await fetch('/api/auth', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ password: passInput.value })
-                });
-
-                const data = await res.json();
-
-                if (data.success) {
-                    localStorage.setItem('coast_admin_auth', 'true');
-                    document.body.classList.add('fade-out');
-                    setTimeout(() => window.location.href = 'admin.html', 350);
-                } else {
-                    error.textContent = 'Access Denied.';
-                    error.style.display = 'block';
-                    passInput.value = '';
-                }
-            } catch (err) {
-                error.textContent = 'Connection Error.';
-                error.style.display = 'block';
-            } finally {
-                btn.textContent = originalText;
-            }
-        }
-        
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && (e.key === 'q' || e.key === 'Q')) { e.preventDefault(); openAdminDrawer(); }
-            if (e.key === 'Escape') closeAdminDrawer();
-        });
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.addEventListener('keydown', e => { if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) e.preventDefault(); });
+        function closeMobile() { document.getElementById('mobileMenu').classList.remove('open'); document.body.style.overflow = ''; }
 
         document.querySelectorAll('a').forEach(link => {
             if (link.hostname === window.location.hostname && !link.target && !link.hasAttribute('download') && link.getAttribute('href') !== '#' && !link.href.startsWith('mailto:')) {
