@@ -12,6 +12,10 @@
     <meta property="og:title" content="Coast Esports">
     <meta property="og:description" content="Professional esports organization competing at the highest level. The tide is rising.">
     <meta property="og:image" content="https://i.postimg.cc/52hvw8Qd/Coast-Banner.png">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Coast Esports">
+    <meta property="twitter:description" content="Professional esports organization competing at the highest level. The tide is rising.">
+    <meta property="twitter:image" content="https://i.postimg.cc/52hvw8Qd/Coast-Banner.png">
 
     <link rel="icon" href="https://i.postimg.cc/mkyVn8Mr/Coast.webp"/>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
@@ -80,10 +84,6 @@
         .form-group label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; font-weight: 600; }
         .form-group input { background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: var(--text); padding: 14px; border-radius: 4px; font-family: inherit; font-size: 14px; outline: none; transition: all 0.3s; }
         .form-group input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1); transform: translateY(-2px); }
-        
-        .checkbox-group { display: flex; align-items: center; gap: 8px; grid-column: 1 / -1; margin-top: 8px; }
-        .checkbox-group input { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
-        .checkbox-group label { font-size: 13px; color: var(--accent); letter-spacing: 0.05em; font-weight: 700; cursor: pointer; margin: 0; }
 
         .submit-btn { grid-column: 1 / -1; background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 16px; border-radius: 4px; font-family: inherit; font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; margin-top: 10px; }
         .submit-btn::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--accent); transition: width 0.3s; z-index: -1; }
@@ -139,21 +139,6 @@
                 <div class="stat-value" id="statLive">0</div>
                 <div class="stat-label">Live Now</div>
             </div>
-            <div class="stat">
-                <div class="stat-value" id="statStars">0</div>
-                <div class="stat-label">Marquee Signings</div>
-            </div>
-        </div>
-
-        <div class="section" style="border-top: none; padding-top: 0; padding-bottom: 10px;">
-            <div class="section-title" style="color: var(--accent); margin-bottom: 12px;">Special Deployments</div>
-            <div style="background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.2); padding: 24px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-                <div>
-                    <div style="font-weight: 700; font-size: 18px; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text);">June 2026 Marquee Reveal</div>
-                    <div style="color: var(--text-muted); font-size: 13px;">Instantly deploy <span style="color: var(--accent); font-weight:700;">PWR Anon</span> to the live roster with priority "Star Signing" placement.</div>
-                </div>
-                <button class="submit-btn" style="margin: 0; width: auto; padding: 12px 24px;" onclick="deployAnon()">Execute Reveal</button>
-            </div>
         </div>
 
         <div class="section">
@@ -194,11 +179,6 @@
                 <div class="form-group">
                     <label>Duo Partner (Optional)</label>
                     <input type="text" id="pDuo" placeholder="e.g. Kadenn"/>
-                </div>
-                
-                <div class="checkbox-group">
-                    <input type="checkbox" id="pStar"/>
-                    <label for="pStar">Mark as MARQUEE SIGNING (Forces player to top of roster)</label>
                 </div>
 
                 <button class="submit-btn" onclick="addPlayer()">Add Player</button>
@@ -248,7 +228,6 @@
         function updateStats() {
             document.getElementById('statTotal').textContent = players.length;
             document.getElementById('statLive').textContent = players.filter(p => p.isLive).length;
-            document.getElementById('statStars').textContent = players.filter(p => p.starPlayer).length;
         }
         
         function renderTable() {
@@ -258,15 +237,9 @@
                 return;
             }
 
-            // Force sort so Star Players are always first in the backend view as well
-            players.sort((a, b) => (b.starPlayer === true) - (a.starPlayer === true));
-
             tbody.innerHTML = players.map((p, i) => `
                 <tr>
-                    <td>
-                        <span class="player-tag" style="color: ${p.starPlayer ? 'var(--accent)' : 'inherit'}">${p.tag}</span>
-                        ${p.starPlayer ? '<span style="font-size:10px; background:var(--accent); color:#000; padding:2px 6px; border-radius:3px; font-weight:700; margin-left:8px; letter-spacing:0.1em;">STAR</span>' : ''}
-                    </td>
+                    <td><span class="player-tag">${p.tag}</span></td>
                     <td>${p.country || '—'}</td>
                     <td>
                         <div class="action-btns">
@@ -278,31 +251,10 @@
             `).join('');
         }
 
-        // --- NEW: Toggle Live Status ---
         async function toggleLive(i) {
             players[i].isLive = !players[i].isLive;
             await saveData();
             showToast(players[i].isLive ? `${players[i].tag} is now LIVE` : `${players[i].tag} is OFFLINE`);
-        }
-
-        // --- NEW: Automatic Marquee Deployment ---
-        async function deployAnon() {
-            if (players.some(p => p.tag.toLowerCase() === 'anon')) {
-                alert('Anon has already been deployed to the roster!');
-                return;
-            }
-            players.unshift({
-                tag: 'Anon',
-                country: 'Australia',
-                tracker: 'https://fortnitetracker.com/profile/all/PWR%20anon%2033%C7%83',
-                twitch: 'https://www.twitch.tv/anonzzx',
-                twitter: 'https://x.com/anonzr',
-                duo: 'Resignz',
-                isLive: false,
-                starPlayer: true // Forces him to the top and gives him the glowing box
-            });
-            await saveData();
-            showToast('MARQUEE SIGNING DEPLOYED: ANON');
         }
         
         async function addPlayer() {
@@ -316,8 +268,7 @@
                 twitch: document.getElementById('pTwitch').value.trim(),
                 twitter: document.getElementById('pTwitter').value.trim(),
                 duo: document.getElementById('pDuo').value.trim(),
-                isLive: false,
-                starPlayer: document.getElementById('pStar').checked
+                isLive: false
             });
             
             await saveData();
@@ -327,7 +278,6 @@
             document.getElementById('pTwitch').value = '';
             document.getElementById('pTwitter').value = '';
             document.getElementById('pDuo').value = '';
-            document.getElementById('pStar').checked = false;
             showToast('Player added successfully');
         }
         

@@ -12,6 +12,10 @@
     <meta property="og:title" content="Coast Esports">
     <meta property="og:description" content="Professional esports organization competing at the highest level. The tide is rising.">
     <meta property="og:image" content="https://i.postimg.cc/52hvw8Qd/Coast-Banner.png">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Coast Esports">
+    <meta property="twitter:description" content="Professional esports organization competing at the highest level. The tide is rising.">
+    <meta property="twitter:image" content="https://i.postimg.cc/52hvw8Qd/Coast-Banner.png">
 
     <link rel="icon" href="https://i.postimg.cc/mkyVn8Mr/Coast.webp"/>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
@@ -68,15 +72,8 @@
         .player-row:hover { padding-left: 20px; background: rgba(0, 212, 255, 0.03); }
         .player-row:hover::before { width: 3px; }
         
-        /* THE STAR SIGNING (MARQUEE) STYLING */
-        .player-row.star-row { background: linear-gradient(90deg, rgba(0, 212, 255, 0.04) 0%, transparent 100%); border: 1px solid rgba(0, 212, 255, 0.15); border-left: 3px solid var(--accent); padding: 32px 24px; margin-top: 16px; margin-bottom: 16px; border-radius: 4px; box-shadow: 0 10px 30px rgba(0, 212, 255, 0.05); }
-        .player-row.star-row::before { display: none; }
-        .player-row.star-row:hover { padding-left: 32px; background: linear-gradient(90deg, rgba(0, 212, 255, 0.08) 0%, transparent 100%); border-color: rgba(0, 212, 255, 0.3); }
-        .star-badge { font-size: 10px; color: #000; background: var(--accent); padding: 4px 10px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; margin-bottom: 12px; display: inline-block; }
-        
         .player-info { display: flex; flex-direction: column; }
         .player-tag { font-size: 28px; font-weight: 700; text-transform: uppercase; letter-spacing: -0.01em; margin-bottom: 4px; transition: color 0.3s; }
-        .player-row.star-row .player-tag { font-size: 40px; color: var(--accent); text-shadow: 0 0 20px rgba(0, 212, 255, 0.4); }
         .player-row:hover .player-tag { color: var(--accent); }
         
         .player-details { display: flex; gap: 12px; align-items: center; }
@@ -243,9 +240,7 @@
                 const res = await fetch('/api/save-data');
                 const data = await res.json();
                 
-                // Force sort so Star Players are always at the very top of the live website
-                const players = (data.players || []).sort((a, b) => (b.starPlayer === true) - (a.starPlayer === true));
-                
+                const players = data.players || [];
                 const container = document.getElementById('rosterContainer');
                 
                 if (!players.length) {
@@ -254,9 +249,6 @@
                 }
                 
                 container.innerHTML = players.map((p, index) => {
-                    const starClass = p.starPlayer ? 'star-row' : '';
-                    const starBadge = p.starPlayer ? `<div class="star-badge">Marquee Signing</div>` : '';
-                    
                     const metaHtml = p.country ? `<span class="player-meta">${p.country}</span>` : '';
                     const duoHtml = p.duo ? `<span class="duo-badge">Duo w/ ${p.duo}</span>` : '';
                     const liveHtml = p.isLive ? `<span class="live-badge">Live</span>` : '';
@@ -267,9 +259,8 @@
                     const trackerHtml = p.tracker ? `<a href="${p.tracker}" target="_blank" class="tracker-link">Tracker →</a>` : '';
 
                     return `
-                        <div class="player-row ${starClass}" style="animation-delay: ${index * 0.1}s">
+                        <div class="player-row" style="animation-delay: ${index * 0.1}s">
                             <div class="player-info">
-                                ${starBadge}
                                 <div class="player-tag">${p.tag}</div>
                                 <div class="player-details">
                                     ${metaHtml}
