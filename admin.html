@@ -85,6 +85,21 @@
         .empty { color: var(--text-muted); padding: 40px 0; font-style: italic; }
         .toast { position: fixed; bottom: 24px; right: 24px; background: var(--success); color: #000; padding: 16px 24px; border-radius: 4px; font-weight: 600; transform: translateY(100px); opacity: 0; transition: all 0.3s; z-index: 1000; }
         .toast.show { transform: translateY(0); opacity: 1; }
+
+        /* Custom Delete Modal */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(2, 6, 20, 0.85); backdrop-filter: blur(8px); z-index: 20000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .modal-overlay.show { opacity: 1; pointer-events: all; }
+        .modal-box { background: var(--bg); border: 1px solid rgba(255, 51, 102, 0.3); padding: 32px; border-radius: 8px; max-width: 400px; width: 90%; transform: translateY(20px); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
+        .modal-overlay.show .modal-box { transform: translateY(0); }
+        .modal-title { font-size: 16px; font-weight: 700; text-transform: uppercase; color: var(--danger); margin-bottom: 12px; letter-spacing: 0.1em; display: flex; align-items: center; gap: 8px; }
+        .modal-title::before { content: '!'; display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; background: rgba(255, 51, 102, 0.1); border-radius: 50%; font-size: 12px; }
+        .modal-text { font-size: 15px; color: var(--text-muted); line-height: 1.6; margin-bottom: 32px; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 12px; }
+        .modal-btn { padding: 12px 24px; font-family: inherit; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 4px; cursor: pointer; transition: all 0.3s; }
+        .cancel-btn { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); }
+        .cancel-btn:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+        .confirm-btn { background: rgba(255, 51, 102, 0.1); border: 1px solid rgba(255, 51, 102, 0.3); color: var(--danger); }
+        .confirm-btn:hover { background: var(--danger); color: #000; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(255, 51, 102, 0.2); }
         
         @media(max-width:768px){ .add-form { grid-template-columns: 1fr; } .stats { flex-direction: column; gap: 24px; } }
     </style>
@@ -169,6 +184,17 @@
     
     <div class="toast" id="toast">Player added successfully</div>
 
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-box">
+            <div class="modal-title">Confirm Removal</div>
+            <div class="modal-text">Are you sure you want to permanently remove <span id="deletePlayerName" style="color: var(--accent); font-weight: 700; text-transform: uppercase;"></span> from the active roster?</div>
+            <div class="modal-actions">
+                <button class="modal-btn cancel-btn" onclick="cancelDelete()">Cancel</button>
+                <button class="modal-btn confirm-btn" onclick="confirmDelete()">Remove Player</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         if (localStorage.getItem('coast_admin_auth') !== 'true') {
             window.location.href = 'index.html';
@@ -181,6 +207,7 @@
         }
         
         let players = [];
+        let playerToDeleteIndex = null; // Stores the index of the player we are trying to delete
         
         async function loadData() {
             try {
@@ -210,7 +237,7 @@
                 <tr>
                     <td><span class="player-tag">${p.tag}</span></td>
                     <td>${p.country || '—'}</td>
-                    <td style="text-align:right;"><button class="delete-btn" onclick="deletePlayer(${i})">Remove</button></td>
+                    <td style="text-align:right;"><button class="delete-btn" onclick="initiateDelete(${i})">Remove</button></td>
                 </tr>
             `).join('');
         }
@@ -238,12 +265,33 @@
             showToast('Player added successfully');
         }
         
-        async function deletePlayer(i) {
-            if (!confirm('Remove this player?')) return;
-            players.splice(i, 1);
+        // --- New Custom Delete Logic ---
+        function initiateDelete(i) {
+            playerToDeleteIndex = i;
+            document.getElementById('deletePlayerName').textContent = players[i].tag;
+            document.getElementById('deleteModal').classList.add('show');
+        }
+
+        function cancelDelete() {
+            playerToDeleteIndex = null;
+            document.getElementById('deleteModal').classList.remove('show');
+        }
+        
+        async function confirmDelete() {
+            if (playerToDeleteIndex === null) return;
+            
+            // Remove the player from the array
+            players.splice(playerToDeleteIndex, 1);
+            
+            // Hide the modal
+            document.getElementById('deleteModal').classList.remove('show');
+            
+            // Save and update
             await saveData();
             showToast('Player removed');
+            playerToDeleteIndex = null;
         }
+        // ---------------------------------
         
         async function saveData() {
             try {
