@@ -12,10 +12,6 @@
     <meta property="og:title" content="Coast Esports">
     <meta property="og:description" content="Professional esports organization competing at the highest level. The tide is rising.">
     <meta property="og:image" content="https://i.postimg.cc/52hvw8Qd/Coast-Banner.png">
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:title" content="Coast Esports">
-    <meta property="twitter:description" content="Professional esports organization competing at the highest level. The tide is rising.">
-    <meta property="twitter:image" content="https://i.postimg.cc/52hvw8Qd/Coast-Banner.png">
 
     <link rel="icon" href="https://i.postimg.cc/mkyVn8Mr/Coast.webp"/>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
@@ -51,7 +47,7 @@
         .page-label { font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; font-weight: 600; }
         .page-title { font-size: clamp(36px, 6vw, 64px); font-weight: 700; letter-spacing: -0.02em; text-transform: uppercase; }
 
-        .stats { display: flex; gap: 40px; margin-bottom: 40px; animation: fadeInUp 0.6s 0.1s both; }
+        .stats { display: flex; gap: 40px; margin-bottom: 40px; animation: fadeInUp 0.6s 0.1s both; flex-wrap: wrap; }
         .stat { display: flex; flex-direction: column; transition: transform 0.3s; }
         .stat:hover { transform: translateY(-5px); }
         .stat-value { font-size: 48px; font-weight: 700; color: var(--accent); line-height: 1; transition: color 0.3s; }
@@ -65,8 +61,16 @@
         .roster-table th { text-align: left; padding: 16px 0; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); font-weight: 600; border-bottom: 1px solid var(--border); }
         .roster-table td { padding: 16px 0; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); transition: all 0.3s; }
         .roster-table tr { animation: slideIn 0.4s ease-out both; }
-        .roster-table tr:hover td { color: var(--accent); background: rgba(0, 212, 255, 0.03); }
+        .roster-table tr:hover td { background: rgba(0, 212, 255, 0.03); }
         .player-tag { font-weight: 700; text-transform: uppercase; }
+        
+        .action-btns { display: flex; gap: 8px; justify-content: flex-end; align-items: center; }
+        .live-btn { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 6px; }
+        .live-btn:hover { border-color: var(--danger); color: var(--danger); }
+        .live-btn.active { background: rgba(255, 51, 102, 0.1); border-color: var(--danger); color: var(--danger); }
+        .live-btn.active::before { content: ''; width: 6px; height: 6px; background: var(--danger); border-radius: 50%; box-shadow: 0 0 8px var(--danger); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
         .delete-btn { background: rgba(255,51,102,0.1); border: 1px solid rgba(255,51,102,0.3); color: var(--danger); padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
         .delete-btn:hover { background: rgba(255,51,102,0.2); transform: scale(1.05); }
 
@@ -77,6 +81,10 @@
         .form-group input { background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: var(--text); padding: 14px; border-radius: 4px; font-family: inherit; font-size: 14px; outline: none; transition: all 0.3s; }
         .form-group input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1); transform: translateY(-2px); }
         
+        .checkbox-group { display: flex; align-items: center; gap: 8px; grid-column: 1 / -1; margin-top: 8px; }
+        .checkbox-group input { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+        .checkbox-group label { font-size: 13px; color: var(--accent); letter-spacing: 0.05em; font-weight: 700; cursor: pointer; margin: 0; }
+
         .submit-btn { grid-column: 1 / -1; background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 16px; border-radius: 4px; font-family: inherit; font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; margin-top: 10px; }
         .submit-btn::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--accent); transition: width 0.3s; z-index: -1; }
         .submit-btn:hover::before { width: 100%; }
@@ -92,7 +100,6 @@
         .modal-box { background: var(--bg); border: 1px solid rgba(255, 51, 102, 0.3); padding: 32px; border-radius: 8px; max-width: 400px; width: 90%; transform: translateY(20px); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
         .modal-overlay.show .modal-box { transform: translateY(0); }
         .modal-title { font-size: 16px; font-weight: 700; text-transform: uppercase; color: var(--danger); margin-bottom: 12px; letter-spacing: 0.1em; display: flex; align-items: center; gap: 8px; }
-        .modal-title::before { content: '!'; display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; background: rgba(255, 51, 102, 0.1); border-radius: 50%; font-size: 12px; }
         .modal-text { font-size: 15px; color: var(--text-muted); line-height: 1.6; margin-bottom: 32px; }
         .modal-actions { display: flex; justify-content: flex-end; gap: 12px; }
         .modal-btn { padding: 12px 24px; font-family: inherit; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; border-radius: 4px; cursor: pointer; transition: all 0.3s; }
@@ -129,12 +136,23 @@
                 <div class="stat-label">Total Players</div>
             </div>
             <div class="stat">
-                <div class="stat-value" id="statTracker">0</div>
-                <div class="stat-label">With Tracker</div>
+                <div class="stat-value" id="statLive">0</div>
+                <div class="stat-label">Live Now</div>
             </div>
             <div class="stat">
-                <div class="stat-value" id="statSocials">0</div>
-                <div class="stat-label">With Socials</div>
+                <div class="stat-value" id="statStars">0</div>
+                <div class="stat-label">Marquee Signings</div>
+            </div>
+        </div>
+
+        <div class="section" style="border-top: none; padding-top: 0; padding-bottom: 10px;">
+            <div class="section-title" style="color: var(--accent); margin-bottom: 12px;">Special Deployments</div>
+            <div style="background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.2); padding: 24px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                <div>
+                    <div style="font-weight: 700; font-size: 18px; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text);">June 2026 Marquee Reveal</div>
+                    <div style="color: var(--text-muted); font-size: 13px;">Instantly deploy <span style="color: var(--accent); font-weight:700;">PWR Anon</span> to the live roster with priority "Star Signing" placement.</div>
+                </div>
+                <button class="submit-btn" style="margin: 0; width: auto; padding: 12px 24px;" onclick="deployAnon()">Execute Reveal</button>
             </div>
         </div>
 
@@ -142,7 +160,7 @@
             <div class="section-title">Current Roster</div>
             <table class="roster-table">
                 <thead>
-                    <tr><th>Tag</th><th>Country</th><th style="text-align:right;">Action</th></tr>
+                    <tr><th>Tag</th><th>Status</th><th style="text-align:right;">Action</th></tr>
                 </thead>
                 <tbody id="rosterBody">
                     <tr><td colspan="3" class="empty">No players found.</td></tr>
@@ -151,7 +169,7 @@
         </div>
 
         <div class="section">
-            <div class="section-title">Add New Player</div>
+            <div class="section-title">Add Custom Player</div>
             <form class="add-form" onsubmit="return false;">
                 <div class="form-group">
                     <label>In-Game Tag *</label>
@@ -177,12 +195,18 @@
                     <label>Duo Partner (Optional)</label>
                     <input type="text" id="pDuo" placeholder="e.g. Kadenn"/>
                 </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="pStar"/>
+                    <label for="pStar">Mark as MARQUEE SIGNING (Forces player to top of roster)</label>
+                </div>
+
                 <button class="submit-btn" onclick="addPlayer()">Add Player</button>
             </form>
         </div>
     </div>
     
-    <div class="toast" id="toast">Player added successfully</div>
+    <div class="toast" id="toast">Command Executed</div>
 
     <div class="modal-overlay" id="deleteModal">
         <div class="modal-box">
@@ -207,7 +231,7 @@
         }
         
         let players = [];
-        let playerToDeleteIndex = null; // Stores the index of the player we are trying to delete
+        let playerToDeleteIndex = null;
         
         async function loadData() {
             try {
@@ -223,8 +247,8 @@
         
         function updateStats() {
             document.getElementById('statTotal').textContent = players.length;
-            document.getElementById('statTracker').textContent = players.filter(p => p.tracker).length;
-            document.getElementById('statSocials').textContent = players.filter(p => p.twitch || p.twitter).length;
+            document.getElementById('statLive').textContent = players.filter(p => p.isLive).length;
+            document.getElementById('statStars').textContent = players.filter(p => p.starPlayer).length;
         }
         
         function renderTable() {
@@ -233,13 +257,52 @@
                 tbody.innerHTML = '<tr><td colspan="3" class="empty">No players found.</td></tr>';
                 return;
             }
+
+            // Force sort so Star Players are always first in the backend view as well
+            players.sort((a, b) => (b.starPlayer === true) - (a.starPlayer === true));
+
             tbody.innerHTML = players.map((p, i) => `
                 <tr>
-                    <td><span class="player-tag">${p.tag}</span></td>
+                    <td>
+                        <span class="player-tag" style="color: ${p.starPlayer ? 'var(--accent)' : 'inherit'}">${p.tag}</span>
+                        ${p.starPlayer ? '<span style="font-size:10px; background:var(--accent); color:#000; padding:2px 6px; border-radius:3px; font-weight:700; margin-left:8px; letter-spacing:0.1em;">STAR</span>' : ''}
+                    </td>
                     <td>${p.country || '—'}</td>
-                    <td style="text-align:right;"><button class="delete-btn" onclick="initiateDelete(${i})">Remove</button></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="live-btn ${p.isLive ? 'active' : ''}" onclick="toggleLive(${i})">${p.isLive ? 'LIVE' : 'Set Live'}</button>
+                            <button class="delete-btn" onclick="initiateDelete(${i})">Remove</button>
+                        </div>
+                    </td>
                 </tr>
             `).join('');
+        }
+
+        // --- NEW: Toggle Live Status ---
+        async function toggleLive(i) {
+            players[i].isLive = !players[i].isLive;
+            await saveData();
+            showToast(players[i].isLive ? `${players[i].tag} is now LIVE` : `${players[i].tag} is OFFLINE`);
+        }
+
+        // --- NEW: Automatic Marquee Deployment ---
+        async function deployAnon() {
+            if (players.some(p => p.tag.toLowerCase() === 'anon')) {
+                alert('Anon has already been deployed to the roster!');
+                return;
+            }
+            players.unshift({
+                tag: 'Anon',
+                country: 'Australia',
+                tracker: 'https://fortnitetracker.com/profile/all/PWR%20anon%2033%C7%83',
+                twitch: 'https://www.twitch.tv/anonzzx',
+                twitter: 'https://x.com/anonzr',
+                duo: 'Resignz',
+                isLive: false,
+                starPlayer: true // Forces him to the top and gives him the glowing box
+            });
+            await saveData();
+            showToast('MARQUEE SIGNING DEPLOYED: ANON');
         }
         
         async function addPlayer() {
@@ -252,7 +315,9 @@
                 tracker: document.getElementById('pTracker').value.trim(),
                 twitch: document.getElementById('pTwitch').value.trim(),
                 twitter: document.getElementById('pTwitter').value.trim(),
-                duo: document.getElementById('pDuo').value.trim()
+                duo: document.getElementById('pDuo').value.trim(),
+                isLive: false,
+                starPlayer: document.getElementById('pStar').checked
             });
             
             await saveData();
@@ -262,10 +327,10 @@
             document.getElementById('pTwitch').value = '';
             document.getElementById('pTwitter').value = '';
             document.getElementById('pDuo').value = '';
+            document.getElementById('pStar').checked = false;
             showToast('Player added successfully');
         }
         
-        // --- New Custom Delete Logic ---
         function initiateDelete(i) {
             playerToDeleteIndex = i;
             document.getElementById('deletePlayerName').textContent = players[i].tag;
@@ -279,19 +344,12 @@
         
         async function confirmDelete() {
             if (playerToDeleteIndex === null) return;
-            
-            // Remove the player from the array
             players.splice(playerToDeleteIndex, 1);
-            
-            // Hide the modal
             document.getElementById('deleteModal').classList.remove('show');
-            
-            // Save and update
             await saveData();
             showToast('Player removed');
             playerToDeleteIndex = null;
         }
-        // ---------------------------------
         
         async function saveData() {
             try {
