@@ -9,7 +9,12 @@
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         :root { --bg: #020614; --bg-card: #0a1536; --accent: #00d4ff; --text: #e2e8f0; --text-muted: #829ab1; --border: rgba(0, 212, 255, 0.15); --danger: #ff3366; }
-        body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* Page Transition Animations */
+        body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; min-height: 100vh; display: flex; flex-direction: column; animation: pageFadeIn 0.5s ease-out forwards; opacity: 0; }
+        @keyframes pageFadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        body.fade-out { animation: pageFadeOut 0.4s ease-in forwards; }
+        @keyframes pageFadeOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-15px); } }
         
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -55,7 +60,6 @@
         .social-link { display: flex; align-items: center; font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; text-decoration: none; transition: all 0.3s; font-weight: 500; }
         .social-link:hover { color: var(--text); }
 
-        /* The specific style for the X/Twitter Link */
         .twitter-link-btn { height: 16px; width: 16px; margin-right: 6px; }
         .twitter-link-btn svg { fill: var(--text-muted); height: 100%; transition: all 0.3s; }
         .social-link:hover .twitter-link-btn svg { fill: var(--text); }
@@ -169,7 +173,8 @@
 
                 if (data.success) {
                     localStorage.setItem('coast_admin_auth', 'true');
-                    window.location.href = 'admin.html';
+                    document.body.classList.add('fade-out');
+                    setTimeout(() => window.location.href = 'admin.html', 350);
                 } else {
                     error.textContent = 'Invalid password.';
                     error.style.display = 'block';
@@ -205,11 +210,8 @@
                     const duoHtml = p.duo ? `<span class="duo-badge">Duo w/ ${p.duo}</span>` : '';
                     
                     const twitchHtml = p.twitch ? `<a href="${p.twitch}" target="_blank" class="social-link">Twitch</a>` : '';
-                    
-                    // Updated Twitter/X link with bigger logo SVG
                     const xLogoSvg = '<div class="twitter-link-btn"><svg viewBox="0 0 24 24"><g><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></g></svg></div>';
                     const twitterHtml = p.twitter ? `<a href="${p.twitter}" target="_blank" class="social-link">${xLogoSvg}</a>` : '';
-                    
                     const trackerHtml = p.tracker ? `<a href="${p.tracker}" target="_blank" class="tracker-link">Tracker →</a>` : '';
 
                     return `
@@ -236,6 +238,18 @@
         loadRoster();
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', e => { if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) e.preventDefault(); });
+
+        // Page Transitions
+        document.querySelectorAll('a').forEach(link => {
+            if (link.hostname === window.location.hostname && !link.target && !link.hasAttribute('download') && link.getAttribute('href') !== '#') {
+                link.addEventListener('click', e => {
+                    e.preventDefault();
+                    const target = link.href;
+                    document.body.classList.add('fade-out');
+                    setTimeout(() => window.location.href = target, 350);
+                });
+            }
+        });
     </script>
 </body>
 </html>

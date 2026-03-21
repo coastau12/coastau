@@ -9,7 +9,12 @@
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         :root { --bg: #020614; --bg-card: #0a1536; --accent: #00d4ff; --text: #e2e8f0; --text-muted: #829ab1; --border: rgba(0, 212, 255, 0.15); --danger: #ff3366; --success: #00ff88; }
-        body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; }
+        
+        /* Page Transition Animations */
+        body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; animation: pageFadeIn 0.5s ease-out forwards; opacity: 0; }
+        @keyframes pageFadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        body.fade-out { animation: pageFadeOut 0.4s ease-in forwards; }
+        @keyframes pageFadeOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-15px); } }
         
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -151,7 +156,8 @@
         
         function logout() {
             localStorage.removeItem('coast_admin_auth');
-            window.location.href = 'index.html';
+            document.body.classList.add('fade-out');
+            setTimeout(() => window.location.href = 'index.html', 350);
         }
         
         let players = [];

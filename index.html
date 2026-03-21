@@ -12,12 +12,17 @@
             --bg: #020614; --accent: #00d4ff; --text: #e2e8f0; 
             --text-muted: #829ab1; --border: rgba(0, 212, 255, 0.15); --danger: #ff3366;
         }
+        
+        /* Page Transition Animations */
         body { 
             background: var(--bg); color: var(--text); 
             font-family: 'Space Grotesk', sans-serif; min-height: 100vh;
-            display: flex; flex-direction: column;
-            overflow-x: hidden;
+            display: flex; flex-direction: column; overflow-x: hidden;
+            animation: pageFadeIn 0.5s ease-out forwards; opacity: 0;
         }
+        @keyframes pageFadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        body.fade-out { animation: pageFadeOut 0.4s ease-in forwards; }
+        @keyframes pageFadeOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-15px); } }
         
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -151,7 +156,8 @@
 
                 if (data.success) {
                     localStorage.setItem('coast_admin_auth', 'true');
-                    window.location.href = 'admin.html';
+                    document.body.classList.add('fade-out');
+                    setTimeout(() => window.location.href = 'admin.html', 350);
                 } else {
                     error.textContent = 'Invalid password.';
                     error.style.display = 'block';
@@ -171,6 +177,18 @@
         });
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', e => { if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) e.preventDefault(); });
+
+        // Page Transitions
+        document.querySelectorAll('a').forEach(link => {
+            if (link.hostname === window.location.hostname && !link.target && !link.hasAttribute('download') && link.getAttribute('href') !== '#') {
+                link.addEventListener('click', e => {
+                    e.preventDefault();
+                    const target = link.href;
+                    document.body.classList.add('fade-out');
+                    setTimeout(() => window.location.href = target, 350);
+                });
+            }
+        });
     </script>
 </body>
 </html>
