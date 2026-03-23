@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>COAST — The Tide Is Rising</title>
 
+    <link rel="preload" as="image" href="https://i.postimg.cc/BZy8JRrT/IMG-1782-Edited.jpg" />
+
     <meta name="title" content="Coast Esports">
     <meta name="description" content="Professional esports organization competing at the highest level. The tide is rising.">
     <meta name="theme-color" content="#00d4ff">
@@ -38,10 +40,11 @@
             background: var(--bg); color: var(--text); 
             font-family: 'Space Grotesk', sans-serif; min-height: 100vh;
             display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto;
-            animation: pageFadeIn 0.5s ease-out forwards; opacity: 0;
+            animation: pageFadeIn 0.4s ease-out forwards; opacity: 0;
+            will-change: opacity; /* Hardware acceleration to stop stuttering */
         }
         @keyframes pageFadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        body.fade-out { animation: pageFadeOut 0.4s ease-in forwards; }
+        body.fade-out { animation: pageFadeOut 0.3s ease-in forwards; }
         @keyframes pageFadeOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-15px); } }
         
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
@@ -64,27 +67,27 @@
 
         .hero { flex: 1; display: flex; flex-direction: column; justify-content: center; position: relative; width: 100%; min-height: 100vh; overflow: hidden; background: var(--bg); }
         
-        /* SHARPENED AND RE-CENTERED BACKGROUND IMAGE */
+        /* HARDWARE ACCELERATED BACKGROUND */
         .hero-bg { 
             position: absolute; 
             inset: 0; 
             z-index: 0; 
             background-image: url('https://i.postimg.cc/BZy8JRrT/IMG-1782-Edited.jpg'); 
             background-size: cover; 
-            background-position: 65% center; /* This pulls the heavy right-side logo towards the middle */
-            filter: brightness(0.5) contrast(1.15) saturate(1.1); 
+            background-position: 65% center; 
+            background-color: var(--bg); /* Prevents white flash */
+            /* Removed laggy filter properties */
         }
         
-        /* CINEMATIC VIGNETTE */
+        /* NEW OVERLAY: Replaces the laggy CSS filters with a lightweight color overlay */
         .hero-overlay {
             position: absolute;
             inset: 0;
             z-index: 1;
-            background: radial-gradient(circle at center, transparent 30%, rgba(2, 6, 20, 0.7) 100%);
+            background: radial-gradient(circle at center, rgba(2, 6, 20, 0.5) 0%, rgba(2, 6, 20, 0.85) 100%);
         }
 
-        /* Linear gradient overlay for smooth fade to black footer */
-        .hero::after { content: ''; position: absolute; inset: 0; z-index: 2; background: linear-gradient(to bottom, transparent 70%, var(--bg) 100%); }
+        .hero::after { content: ''; position: absolute; inset: 0; z-index: 2; background: linear-gradient(to bottom, transparent 60%, var(--bg) 100%); }
         
         .hero-content { position: relative; z-index: 3; padding: 120px 5% 60px; max-width: 1400px; margin: 0 auto; width: 100%; }
         .hero-label { font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; font-weight: 600; animation: fadeInUp 0.8s ease-out; }
@@ -208,7 +211,7 @@
                 if (data.success) {
                     localStorage.setItem('coast_admin_auth', 'true');
                     document.body.classList.add('fade-out');
-                    setTimeout(() => window.location.href = 'admin.html', 350);
+                    setTimeout(() => window.location.href = 'admin.html', 300);
                 } else {
                     error.textContent = 'Access Denied.';
                     error.style.display = 'block';
@@ -235,7 +238,7 @@
                     e.preventDefault();
                     const target = link.href;
                     document.body.classList.add('fade-out');
-                    setTimeout(() => window.location.href = target, 350);
+                    setTimeout(() => window.location.href = target, 300);
                 });
             }
         });
