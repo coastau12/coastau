@@ -11,11 +11,11 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="Coast Esports">
     <meta property="og:description" content="Professional esports organization competing at the highest level. The tide is rising.">
-    <meta property="og:image" content="https://i.postimg.cc/52hvw8Qd/Coast-Banner.png">
+    <meta property="og:image" content="https://i.postimg.cc/BZy8JRrT/IMG-1782-Edited.jpg">
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:title" content="Coast Esports">
     <meta property="twitter:description" content="Professional esports organization competing at the highest level. The tide is rising.">
-    <meta property="twitter:image" content="https://i.postimg.cc/52hvw8Qd/Coast-Banner.png">
+    <meta property="twitter:image" content="https://i.postimg.cc/BZy8JRrT/IMG-1782-Edited.jpg">
 
     <link rel="icon" href="https://i.postimg.cc/mkyVn8Mr/Coast.webp"/>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
@@ -33,6 +33,7 @@
         @keyframes pageFadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         body.fade-out { animation: pageFadeOut 0.4s ease-in forwards; }
         @keyframes pageFadeOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-15px); } }
+        
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
@@ -51,16 +52,18 @@
         .mobile-menu a { font-size: 28px; font-weight: 700; color: var(--text); text-decoration: none; text-transform: uppercase; }
         .mobile-close { position: absolute; top: 24px; right: 5%; font-size: 28px; background: none; border: none; color: var(--text-muted); cursor: pointer; }
 
-        .content { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 120px 5%; width: 100%; }
+        .content { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 120px 5%; width: 100%; position: relative; overflow: hidden; background: var(--bg); }
+        
         .error-code { font-size: clamp(100px, 20vw, 250px); font-weight: 700; line-height: 0.8; color: transparent; -webkit-text-stroke: 2px var(--border); margin-bottom: 24px; position: relative; animation: fadeInUp 0.6s both; }
         .error-code::after { content: '404'; position: absolute; left: 0; top: 0; width: 100%; height: 100%; color: var(--accent); clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%); }
         .page-title { font-size: clamp(32px, 8vw, 64px); font-weight: 700; letter-spacing: -0.02em; text-transform: uppercase; margin-bottom: 16px; animation: fadeInUp 0.6s 0.1s both; }
         .page-text { font-size: 18px; color: var(--text-muted); max-width: 500px; line-height: 1.6; margin-bottom: 40px; animation: fadeInUp 0.6s 0.2s both; }
         
-        .btn { display: inline-block; padding: 16px 32px; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; color: #000; background: var(--accent); border: 1px solid var(--accent); border-radius: 4px; transition: all 0.3s; animation: fadeInUp 0.6s 0.3s both; }
+        .btn { display: inline-block; padding: 16px 32px; font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; color: #000; background: var(--accent); border: 1px solid var(--accent); border-radius: 4px; transition: all 0.3s; animation: fadeInUp 0.6s 0.3s both; position: relative; overflow: hidden; }
+        .btn::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: transparent; transition: background 0.3s; z-index: -1; }
         .btn:hover { background: transparent; color: var(--accent); transform: translateY(-2px); }
 
-        footer { border-top: 1px solid var(--border); padding: 24px 5%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; font-size: 12px; color: var(--text-muted); animation: fadeIn 1s 0.4s both; }
+        footer { position: relative; z-index: 10; border-top: 1px solid var(--border); padding: 24px 5%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; font-size: 12px; color: var(--text-muted); animation: fadeIn 1s 0.4s both; background: var(--bg); }
         footer img { height: 28px; border-radius: 6px; }
         .footer-hash { display: flex; gap: 16px; color: var(--accent); font-weight: 600; }
         
@@ -88,10 +91,12 @@
     </nav>
 
     <main class="content">
-        <div class="error-code">404</div>
-        <h1 class="page-title">Lost at Sea</h1>
-        <p class="page-text">The page you are looking for has been caught in the tide. It might have been removed, renamed, or temporarily pulled under.</p>
-        <a href="index.html" class="btn">Return to Surface</a>
+        <div style="position: relative; z-index: 4;">
+            <div class="error-code">404</div>
+            <h1 class="page-title">Lost at Sea</h1>
+            <p class="page-text">The page you are looking for has been caught in the tide. It might have been removed, renamed, or temporarily pulled under.</p>
+            <a href="index.html" class="btn">Return to Surface</a>
+        </div>
     </main>
 
     <footer>
